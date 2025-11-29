@@ -1,3 +1,4 @@
+using Inventive.AdminAPI.Util;
 using Inventive.Data;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
@@ -16,6 +17,8 @@ builder.Host.UseSerilog();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+DependencyInjectionHelper.ConfigureServices(builder.Services);
+
 
 // Configure PostgreSQL
 builder.Services.AddDbContext<InventiveContext>(options =>
