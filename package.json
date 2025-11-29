@@ -8,7 +8,12 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "prepare": "husky"
+    "prepare": "husky",
+    "format": "prettier --write \"**/*.{ts,js,json,md,yml,yaml}\"",
+    "format:check": "prettier --check \"**/*.{ts,js,json,md,yml,yaml}\"",
+    "lint:portal": "cd Inventive.UI/Portal && npm run lint",
+    "lint:admin": "cd Inventive.UI/Admin && npm run lint",
+    "dotnet:format": "dotnet format --verify-no-changes"
   },
   "repository": {
     "type": "git",
@@ -25,6 +30,11 @@
   "devDependencies": {
     "@commitlint/cli": "^20.1.0",
     "@commitlint/config-conventional": "^20.0.0",
-    "husky": "^9.1.7"
+    "husky": "^9.1.7",
+    "lint-staged": "^15.2.11",
+    "prettier": "^3.4.2"
+  },
+  "lint-staged": {
+    "*.{ts,js,json,md,yml,yaml}": "npx prettier --write"
   }
 }

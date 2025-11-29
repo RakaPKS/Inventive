@@ -1,16 +1,29 @@
 <Project Sdk="Microsoft.NET.Sdk.Worker">
 
-    <PropertyGroup>
-        <TargetFramework>net10.0</TargetFramework>
-        <Nullable>enable</Nullable>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <UserSecretsId>dotnet-Inventive.Workers-f0357432-5db3-4ef9-ab68-21f3ae51bf57</UserSecretsId>
-        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-        <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
-        <AnalysisLevel>latest-all</AnalysisLevel>
-    </PropertyGroup>
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>dotnet-Inventive.Workers-f0357432-5db3-4ef9-ab68-21f3ae51bf57</UserSecretsId>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+    <AnalysisLevel>latest-all</AnalysisLevel>
+  </PropertyGroup>
 
-    <ItemGroup>
-        <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.0"/>
-    </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Hangfire.AspNetCore" Version="1.8.18"/>
+    <PackageReference Include="Hangfire.PostgreSql" Version="1.20.12"/>
+    <PackageReference Include="MassTransit.RabbitMQ" Version="8.3.5"/>
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.0"/>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3"/>
+    <PackageReference Include="Serilog.Extensions.Hosting" Version="10.0.0"/>
+    <PackageReference Include="Serilog.Sinks.Console" Version="6.1.1"/>
+    <PackageReference Include="Serilog.Sinks.Seq" Version="9.0.0"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Inventive.Core\Inventive.Core.csproj"/>
+    <ProjectReference Include="..\Inventive.Data\Inventive.Data.csproj"/>
+    <ProjectReference Include="..\Inventive.Services\Inventive.Services.csproj"/>
+  </ItemGroup>
 </Project>

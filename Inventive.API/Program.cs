@@ -1,6 +1,7 @@
 using Inventive.Data;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
+using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,8 +25,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 var redisConnectionString = builder.Configuration["Redis:ConnectionString"];
 if (!string.IsNullOrEmpty(redisConnectionString))
 {
-    builder.Services.AddSingleton<StackExchange.Redis.IConnectionMultiplexer>(
-        StackExchange.Redis.ConnectionMultiplexer.Connect(redisConnectionString));
+    builder.Services.AddSingleton<IConnectionMultiplexer>(
+        ConnectionMultiplexer.Connect(redisConnectionString));
 }
 
 var app = builder.Build();

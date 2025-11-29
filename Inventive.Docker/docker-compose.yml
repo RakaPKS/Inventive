@@ -6,15 +6,15 @@ services:
     ports:
       - "${POSTGRES_PORT:-5432}:5432"
     environment:
-      POSTGRES_DB: ${POSTGRES_DB:-Inventive}
       POSTGRES_USER: ${POSTGRES_USER:-postgres}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
     volumes:
-      - postgres_data:/var/lib/postgresql
+      - postgres_data:/var/lib/postgresql/data
+      - ./init-databases.sql:/docker-entrypoint-initdb.d/init-databases.sql
     networks:
       - inventive-network
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d Inventive"]
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -41,8 +41,8 @@ services:
     container_name: inventive-rabbitmq
     restart: unless-stopped
     ports:
-      - "${RABBITMQ_PORT:-5672}:5672"      # AMQP
-      - "${RABBITMQ_MGMT_PORT:-15672}:15672"  # Management UI
+      - "${RABBITMQ_PORT:-5672}:5672" # AMQP
+      - "${RABBITMQ_MGMT_PORT:-15672}:15672" # Management UI
     environment:
       RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER:-rabbitmq}
       RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD:-rabbitmq}
@@ -62,8 +62,8 @@ services:
     container_name: inventive-seq
     restart: unless-stopped
     ports:
-      - "${SEQ_INGESTION_PORT:-5341}:5341"  # Ingestion
-      - "${SEQ_UI_PORT:-8081}:80"           # Web UI
+      - "${SEQ_INGESTION_PORT:-5341}:5341" # Ingestion
+      - "${SEQ_UI_PORT:-8081}:80" # Web UI
     environment:
       ACCEPT_EULA: "Y"
       SEQ_FIRSTRUN_NOAUTHENTICATION: "true"
