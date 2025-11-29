@@ -1,0 +1,93 @@
+services:
+  postgres:
+    image: postgres:latest
+    container_name: inventive-postgres
+    restart: unless-stopped
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-Inventive}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+    volumes:
+      - postgres_data:/var/lib/postgresql
+    networks:
+      - inventive-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d Inventive"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:latest
+    container_name: inventive-redis
+    restart: unless-stopped
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    command: redis-server --appendonly yes --requirepass redis
+    volumes:
+      - redis_data:/data
+    networks:
+      - inventive-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "redis", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  rabbitmq:
+    image: rabbitmq:latest
+    container_name: inventive-rabbitmq
+    restart: unless-stopped
+    ports:
+      - "${RABBITMQ_PORT:-5672}:5672"      # AMQP
+      - "${RABBITMQ_MGMT_PORT:-15672}:15672"  # Management UI
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER:-rabbitmq}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD:-rabbitmq}
+      RABBITMQ_DEFAULT_VHOST: ${RABBITMQ_VHOST:-/}
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      - inventive-network
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  seq:
+    image: datalust/seq:latest
+    container_name: inventive-seq
+    restart: unless-stopped
+    ports:
+      - "${SEQ_INGESTION_PORT:-5341}:5341"  # Ingestion
+      - "${SEQ_UI_PORT:-8081}:80"           # Web UI
+    environment:
+      ACCEPT_EULA: "Y"
+      SEQ_FIRSTRUN_NOAUTHENTICATION: "true"
+    volumes:
+      - seq_data:/data
+    networks:
+      - inventive-network
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost/api || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+networks:
+  inventive-network:
+    driver: bridge
+    name: inventive-network
+
+volumes:
+  postgres_data:
+    name: inventive-postgres-data
+  redis_data:
+    name: inventive-redis-data
+  rabbitmq_data:
+    name: inventive-rabbitmq-data
+  seq_data:
+    name: inventive-seq-data
