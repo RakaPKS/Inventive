@@ -1,6 +1,7 @@
 namespace Inventive.Workers;
 
-public class Worker(ILogger<Worker> logger) : BackgroundService
+internal sealed class Worker(ILogger<Worker> logger) : BackgroundService
+#pragma warning restore CA1812
 {
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
@@ -8,10 +9,10 @@ public class Worker(ILogger<Worker> logger) : BackgroundService
         {
             if (logger.IsEnabled(LogLevel.Information))
             {
-                logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
+                logger.LogInformation("Worker running at: {DateTimeOffset}", DateTimeOffset.Now);
             }
 
-            await Task.Delay(1000, stoppingToken);
+            await Task.Delay(1000, stoppingToken).ConfigureAwait(false);
         }
     }
 }

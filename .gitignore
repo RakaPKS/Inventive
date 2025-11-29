@@ -539,3 +539,6 @@ fabric.properties
 docs
 .claude
 CLAUDE.md
+
+# NPM
+package-lock.json
