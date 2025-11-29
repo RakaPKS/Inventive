@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Inventive.Data;
 
-public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : DbContext(options)
+public class InventiveContext(DbContextOptions<InventiveContext> options) : DbContext(options)
 {
     protected override void OnModelCreating(ModelBuilder modelBuilder) => base.OnModelCreating(modelBuilder);
 }
