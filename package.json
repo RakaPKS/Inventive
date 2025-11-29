@@ -1,0 +1,30 @@
+{
+  "name": "inventive",
+  "version": "1.0.0",
+  "description": "**Invent**ory management meets **inventive** engineering.",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "husky"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RakaPKS/Inventive.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/RakaPKS/Inventive/issues"
+  },
+  "homepage": "https://github.com/RakaPKS/Inventive#readme",
+  "devDependencies": {
+    "@commitlint/cli": "^20.1.0",
+    "@commitlint/config-conventional": "^20.0.0",
+    "husky": "^9.1.7"
+  }
+}
