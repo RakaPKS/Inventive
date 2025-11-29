@@ -13,6 +13,8 @@
     "format:check": "prettier --check \"**/*.{ts,js,json,md,yml,yaml}\"",
     "lint:portal": "cd Inventive.UI/Portal && npm run lint",
     "lint:admin": "cd Inventive.UI/Admin && npm run lint",
+    "start-portal": "cd Inventive.UI/Portal && npm start",
+    "start-admin": "cd Inventive.UI/Admin && npm start",
     "dotnet:format": "dotnet format --verify-no-changes"
   },
   "repository": {
