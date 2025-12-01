@@ -25,22 +25,25 @@ internal sealed class EquipmentController(IAdminEquipmentService equipmentServic
             Height = request.Height,
             Weight = request.Weight
         });
-        if (result.IsSuccess)
+        if (!result.IsSuccess)
         {
-            return Ok(new AddEquipmentResponseModel
-            {
-                Id = result.Value.Id,
-                Name = result.Value.Name,
-                Description = result.Value.Description,
-                Status = result.Value.Status,
-                Length = result.Value.Length,
-                Width = result.Value.Width,
-                Height = result.Value.Height,
-                Weight = result.Value.Weight,
-                CreatedAt = result.Value.CreatedAt
-            });
+            logger.LogError(
+                "{EquipmentControllerName}.{AddEquipmentName}: Unexpected error during create equipment request for item: {RequestName}",
+                nameof(EquipmentController), nameof(AddEquipment), request.Name);
+            return StatusCode(StatusCodes.Status500InternalServerError);
         }
 
-        return NotFound();
+        return Ok(new AddEquipmentResponseModel
+        {
+            Id = result.Value.Id,
+            Name = result.Value.Name,
+            Description = result.Value.Description,
+            Status = result.Value.Status,
+            Length = result.Value.Length,
+            Width = result.Value.Width,
+            Height = result.Value.Height,
+            Weight = result.Value.Weight,
+            CreatedAt = result.Value.CreatedAt
+        });
     }
 }

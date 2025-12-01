@@ -6,8 +6,8 @@ namespace Inventive.Data;
 public class InventiveContext : DbContext
 {
     /// <summary>
-    /// Well-known System user ID for system actions (migrations, background jobs, etc.)
-    /// This user will be seeded in the database during Feature 02 migration.
+    ///     Well-known System user ID for system actions (migrations, background jobs, etc.)
+    ///     This user will be seeded in the database during Feature 02 migration.
     /// </summary>
     public static readonly Guid SystemUserId = new("00000000-0000-0000-0000-000000000001");
 
@@ -19,10 +19,10 @@ public class InventiveContext : DbContext
     public DbSet<Equipment> Equipment => Set<Equipment>();
 
     /// <summary>
-    /// Automatically populates audit fields for all entities inheriting from AuditableEntity.
-    /// Uses hybrid approach: Guid for operational queries, string for immutable compliance.
-    /// Phase 1: Uses System user (00000001) as default (no auth yet)
-    /// Phase 2: Will use ICurrentUserService to capture real user IDs and emails from JWT claims
+    ///     Automatically populates audit fields for all entities inheriting from AuditableEntity.
+    ///     Uses hybrid approach: Guid for operational queries, string for immutable compliance.
+    ///     Phase 1: Uses System user (00000001) as default (no auth yet)
+    ///     Phase 2: Will use ICurrentUserService to capture real user IDs and emails from JWT claims
     /// </summary>
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
@@ -32,16 +32,16 @@ public class InventiveContext : DbContext
             {
                 case EntityState.Added:
                     entry.Entity.CreatedAt = DateTimeOffset.UtcNow;
-                    entry.Entity.CreatedById = SystemUserId;  // Phase 1: System user
-                    entry.Entity.CreatedBy = "System";        // Phase 1: Placeholder
+                    entry.Entity.CreatedById = SystemUserId; // Phase 1: System user
+                    entry.Entity.CreatedBy = "System"; // Phase 1: Placeholder
                     // Phase 2: entry.Entity.CreatedById = _currentUser?.UserId ?? SystemUserId;
                     // Phase 2: entry.Entity.CreatedBy = _currentUser?.Email ?? "System";
                     break;
 
                 case EntityState.Modified:
                     entry.Entity.ModifiedAt = DateTimeOffset.UtcNow;
-                    entry.Entity.ModifiedById = SystemUserId;  // Phase 1: System user
-                    entry.Entity.ModifiedBy = "System";        // Phase 1: Placeholder
+                    entry.Entity.ModifiedById = SystemUserId; // Phase 1: System user
+                    entry.Entity.ModifiedBy = "System"; // Phase 1: Placeholder
                     // Phase 2: entry.Entity.ModifiedById = _currentUser?.UserId ?? SystemUserId;
                     // Phase 2: entry.Entity.ModifiedBy = _currentUser?.Email ?? "System";
                     break;
@@ -68,7 +68,7 @@ public class InventiveContext : DbContext
                 .HasMaxLength(1000);
 
             entity.Property(e => e.Status)
-                .IsRequired();  // Stored as int (default) for better performance
+                .IsRequired(); // Stored as int (default) for better performance
 
             entity.Property(e => e.Length)
                 .IsRequired()
@@ -89,12 +89,12 @@ public class InventiveContext : DbContext
             entity.Property(e => e.CreatedAt)
                 .IsRequired();
 
-            entity.Property(e => e.CreatedById);  // Nullable - null for system actions
+            entity.Property(e => e.CreatedById);
 
             entity.Property(e => e.CreatedBy)
                 .HasMaxLength(200);
 
-            entity.Property(e => e.ModifiedById);  // Nullable - null for system actions
+            entity.Property(e => e.ModifiedById);
 
             entity.Property(e => e.ModifiedBy)
                 .HasMaxLength(200);

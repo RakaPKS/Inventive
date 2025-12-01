@@ -2,6 +2,10 @@
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Inventive.AdminAPI.Validators.Equipment;
+using Inventive.Core.Interfaces.Repositories;
+using Inventive.Core.Interfaces.Services.Equipment;
+using Inventive.Data.Repositories;
+using Inventive.Services.Equipment;
 
 namespace Inventive.AdminAPI.Util;
 
@@ -13,7 +17,17 @@ internal static class DependencyInjectionHelper
         ConfigureValidators(services);
     }
 
-    private static void ConfigureInjection(IServiceCollection services) => services.AddTransient<EquipmentController>();
+    private static void ConfigureInjection(IServiceCollection services)
+    {
+        // Controllers
+        services.AddTransient<EquipmentController>();
+
+        // Repositories (Scoped - one instance per request, tied to DbContext lifetime)
+        services.AddScoped<IEquipmentRepository, EquipmentRepository>();
+
+        // Services (Scoped - business logic should match repository lifetime)
+        services.AddScoped<IAdminEquipmentService, AdminEquipmentService>();
+    }
 
     private static void ConfigureValidators(IServiceCollection serviceCollection)
     {
