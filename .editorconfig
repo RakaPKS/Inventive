@@ -535,9 +535,6 @@ dotnet_diagnostic.IDE0005.severity = suggestion
 # IDE0011: Add braces
 dotnet_diagnostic.IDE0011.severity = warning
 
-# IDE0016: Underscore private variables
-dotnet_diagnostic.IDE0016.severity = none
-
 # IDE0035: Remove unreachable code
 dotnet_diagnostic.IDE0035.severity = warning
 
@@ -570,6 +567,9 @@ dotnet_diagnostic.IDE0070.severity = suggestion
 
 # IDE0072: Add missing cases to switch expression
 dotnet_diagnostic.IDE0072.severity = suggestion
+
+# IDE0016: Underscore private variables
+dotnet_diagnostic.IDE1006.severity = none
 
 # IDE0161: Use file-scoped namespace
 dotnet_diagnostic.IDE0161.severity = warning

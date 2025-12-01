@@ -46,7 +46,7 @@ public class AdminEquipmentService(IEquipmentRepository equipmentRepository, ILo
         };
 
         logger.LogInformation(
-            "{AdminEquipmentService}.{AddNewEquipment}: Sucessfully Added {EquipmentName} with id {EquipmentId}",
+            "{AdminEquipmentService}.{AddNewEquipment}: Successfully Added {EquipmentName} with id {EquipmentId}",
             nameof(AdminEquipmentService), nameof(AddNewEquipment), request.Name, response.Id);
 
         return Result.Ok(response);

@@ -3,17 +3,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Inventive.Data;
 
-public class InventiveContext : DbContext
+public class InventiveContext(DbContextOptions<InventiveContext> options) : DbContext(options)
 {
     /// <summary>
     ///     Well-known System user ID for system actions (migrations, background jobs, etc.)
     ///     This user will be seeded in the database during Feature 02 migration.
     /// </summary>
-    public static readonly Guid SystemUserId = new("00000000-0000-0000-0000-000000000001");
-
-    public InventiveContext(DbContextOptions<InventiveContext> options) : base(options)
-    {
-    }
+    private static readonly Guid SystemUserId = new("00000000-0000-0000-0000-000000000001");
 
     // DbSets
     public DbSet<Equipment> Equipment => Set<Equipment>();
