@@ -535,6 +535,9 @@ dotnet_diagnostic.IDE0005.severity = suggestion
 # IDE0011: Add braces
 dotnet_diagnostic.IDE0011.severity = warning
 
+# IDE0016: Underscore private variables
+dotnet_diagnostic.IDE0016.severity = none
+
 # IDE0035: Remove unreachable code
 dotnet_diagnostic.IDE0035.severity = warning
 
