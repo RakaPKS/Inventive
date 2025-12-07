@@ -26,6 +26,9 @@ public abstract class IntegrationTestBase<TProgram> : IAsyncLifetime where TProg
         Factory = new WebApplicationFactory<TProgram>()
             .WithWebHostBuilder(builder =>
             {
+                // Disable Redis for tests
+                builder.UseSetting("Redis:ConnectionString", string.Empty);
+
                 builder.ConfigureTestServices(services =>
                 {
                     // Remove the existing DbContext registration
