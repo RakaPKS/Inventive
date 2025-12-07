@@ -1,3 +1,5 @@
+using FluentValidation;
+using Inventive.AdminAPI.Filters;
 using Inventive.AdminAPI.Util;
 using Inventive.Data;
 using Microsoft.EntityFrameworkCore;
@@ -14,7 +16,14 @@ Log.Logger = new LoggerConfiguration()
 builder.Host.UseSerilog();
 
 // Add services
-builder.Services.AddControllers();
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add<ValidationFilter>();
+});
+builder.Services.AddScoped<ValidationFilter>();
+builder.Services.AddValidatorsFromAssemblyContaining<Program>(
+    includeInternalTypes: true,
+    lifetime: ServiceLifetime.Scoped);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 DependencyInjectionHelper.ConfigureServices(builder.Services);
@@ -74,5 +83,5 @@ finally
 // Make Program accessible for integration tests
 namespace Inventive.AdminAPI
 {
-    public partial class Program;
+    public class Program;
 }

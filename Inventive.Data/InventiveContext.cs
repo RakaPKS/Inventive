@@ -84,7 +84,7 @@ public class InventiveContext(DbContextOptions<InventiveContext> options) : DbCo
 
             entity.Property(e => e.Weight)
                 .IsRequired()
-                .HasPrecision(10, 2);
+                .HasPrecision(10, 3);
 
             entity.Property(e => e.CreatedAt)
                 .IsRequired();

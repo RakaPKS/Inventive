@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Inventive.Data.Migrations
 {
     [DbContext(typeof(InventiveContext))]
-    [Migration("20251207120540_Init")]
+    [Migration("20251207162830_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -81,8 +81,8 @@ namespace Inventive.Data.Migrations
                         .HasColumnType("integer");
 
                     b.Property<decimal>("Weight")
-                        .HasPrecision(10, 2)
-                        .HasColumnType("numeric(10,2)");
+                        .HasPrecision(10, 3)
+                        .HasColumnType("numeric(10,3)");
 
                     b.Property<decimal>("Width")
                         .HasPrecision(10, 2)

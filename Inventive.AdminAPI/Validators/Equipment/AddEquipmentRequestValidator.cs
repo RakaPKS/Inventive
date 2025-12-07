@@ -3,9 +3,9 @@ using Inventive.AdminAPI.Models.V1.Equipment;
 
 namespace Inventive.AdminAPI.Validators.Equipment;
 
-internal abstract class AddEquipmentRequestValidator : AbstractValidator<AddEquipmentRequestModel>
+internal sealed class AddEquipmentRequestValidator : AbstractValidator<AddEquipmentRequestModel>
 {
-    protected AddEquipmentRequestValidator()
+    public AddEquipmentRequestValidator()
     {
         RuleFor(x => x.Name)
             .NotEmpty()
@@ -28,11 +28,13 @@ internal abstract class AddEquipmentRequestValidator : AbstractValidator<AddEqui
             .WithMessage("Width must be greater than 0 and have at most 2 decimal places");
 
         RuleFor(x => x.Height)
+            .NotNull()
             .GreaterThan(0)
-            .PrecisionScale(10, 3, true)
+            .PrecisionScale(10, 2, true)
             .WithMessage("Height must be greater than 0 and have at most 2 decimal places");
 
         RuleFor(x => x.Weight)
+            .NotNull()
             .GreaterThan(0)
             .PrecisionScale(10, 3, true)
             .WithMessage("Weight must be greater than 0 and have at most 3 decimal places");

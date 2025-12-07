@@ -154,4 +154,151 @@ public class EquipmentIntegrationTests : IntegrationTestBase<AdminAPI.Program>
         var content = await response.Content.ReadAsStringAsync();
         content.Should().Contain($"Equipment with ID {nonExistentId} not found");
     }
+
+    [Fact]
+    public async Task AddEquipment_WithEmptyName_ReturnsBadRequest()
+    {
+        // Arrange
+        var request = new AddEquipmentRequestModel
+        {
+            Name = "",
+            Description = "Valid Description",
+            Length = 100,
+            Width = 50,
+            Height = 75,
+            Weight = 25
+        };
+
+        // Act
+        var response = await Client.PostAsJsonAsync("/v1/equipment", request);
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+    }
+
+    [Fact]
+    public async Task AddEquipment_WithNameTooLong_ReturnsBadRequest()
+    {
+        // Arrange
+        var request = new AddEquipmentRequestModel
+        {
+            Name = new string('A', 201), // 201 characters, max is 200
+            Description = "Valid Description",
+            Length = 100,
+            Width = 50,
+            Height = 75,
+            Weight = 25
+        };
+
+        // Act
+        var response = await Client.PostAsJsonAsync("/v1/equipment", request);
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+    }
+
+    [Fact]
+    public async Task AddEquipment_WithDescriptionTooLong_ReturnsBadRequest()
+    {
+        // Arrange
+        var request = new AddEquipmentRequestModel
+        {
+            Name = "Valid Name",
+            Description = new string('B', 1001), // 1001 characters, max is 1000
+            Length = 100,
+            Width = 50,
+            Height = 75,
+            Weight = 25
+        };
+
+        // Act
+        var response = await Client.PostAsJsonAsync("/v1/equipment", request);
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+    }
+
+    [Fact]
+    public async Task AddEquipment_WithZeroLength_ReturnsBadRequest()
+    {
+        // Arrange
+        var request = new AddEquipmentRequestModel
+        {
+            Name = "Valid Name",
+            Description = "Valid Description",
+            Length = 0,
+            Width = 50,
+            Height = 75,
+            Weight = 25
+        };
+
+        // Act
+        var response = await Client.PostAsJsonAsync("/v1/equipment", request);
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+    }
+
+    [Fact]
+    public async Task AddEquipment_WithNegativeWidth_ReturnsBadRequest()
+    {
+        // Arrange
+        var request = new AddEquipmentRequestModel
+        {
+            Name = "Valid Name",
+            Description = "Valid Description",
+            Length = 100,
+            Width = -50,
+            Height = 75,
+            Weight = 25
+        };
+
+        // Act
+        var response = await Client.PostAsJsonAsync("/v1/equipment", request);
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+    }
+
+    [Fact]
+    public async Task AddEquipment_WithNegativeHeight_ReturnsBadRequest()
+    {
+        // Arrange
+        var request = new AddEquipmentRequestModel
+        {
+            Name = "Valid Name",
+            Description = "Valid Description",
+            Length = 100,
+            Width = 50,
+            Height = -75,
+            Weight = 25
+        };
+
+        // Act
+        var response = await Client.PostAsJsonAsync("/v1/equipment", request);
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+    }
+
+    [Fact]
+    public async Task AddEquipment_WithNegativeWeight_ReturnsBadRequest()
+    {
+        // Arrange
+        var request = new AddEquipmentRequestModel
+        {
+            Name = "Valid Name",
+            Description = "Valid Description",
+            Length = 100,
+            Width = 50,
+            Height = 75,
+            Weight = -25
+        };
+
+        // Act
+        var response = await Client.PostAsJsonAsync("/v1/equipment", request);
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+    }
 }
