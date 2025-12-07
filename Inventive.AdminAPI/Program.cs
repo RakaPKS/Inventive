@@ -33,7 +33,7 @@ if (!string.IsNullOrEmpty(redisConnectionString))
         var options = ConfigurationOptions.Parse(redisConnectionString);
         options.AbortOnConnectFail = false;
         builder.Services.AddSingleton<IConnectionMultiplexer>(
-            ConnectionMultiplexer.Connect(options));
+            await ConnectionMultiplexer.ConnectAsync(options));
         Log.Information("Redis connection configured");
     }
     catch (Exception ex)
@@ -60,7 +60,7 @@ app.MapControllers();
 try
 {
     Log.Information("Starting Inventive Admin API");
-    app.Run();
+    await app.RunAsync();
 }
 catch (Exception ex)
 {
@@ -68,11 +68,11 @@ catch (Exception ex)
 }
 finally
 {
-    Log.CloseAndFlush();
+    await Log.CloseAndFlushAsync();
 }
 
 // Make Program accessible for integration tests
 namespace Inventive.AdminAPI
 {
-    public partial class Program;
+    public class Program;
 }

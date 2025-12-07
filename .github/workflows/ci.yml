@@ -50,7 +50,7 @@ jobs:
             --results-directory ./coverage
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@5a1091511ad55cbe89839c7260b706298ca349f7
         with:
           files: ./coverage/**/coverage.cobertura.xml
           fail_ci_if_error: false
@@ -58,7 +58,7 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
 
       - name: Publish test results
-        uses: EnricoMi/publish-unit-test-result-action@v2
+        uses: EnricoMi/publish-unit-test-result-action@34d7c956a59aed1bfebf31df77b8de55db9bbaaf
         if: always()
         with:
           files: |

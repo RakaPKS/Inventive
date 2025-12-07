@@ -11,7 +11,7 @@ namespace Inventive.AdminAPI.Controllers.V1;
 [ApiController]
 [Route("v1/[controller]")]
 public sealed class EquipmentController(IAdminEquipmentService equipmentService, ILogger<EquipmentController> logger)
-    : Controller
+    : ControllerBase
 {
     [HttpPost]
     public async Task<IActionResult> AddEquipment(AddEquipmentRequestModel request)
