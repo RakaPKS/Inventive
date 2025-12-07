@@ -16,10 +16,7 @@ Log.Logger = new LoggerConfiguration()
 builder.Host.UseSerilog();
 
 // Add services
-builder.Services.AddControllers(options =>
-{
-    options.Filters.Add<ValidationFilter>();
-});
+builder.Services.AddControllers(options => options.Filters.Add<ValidationFilter>());
 builder.Services.AddScoped<ValidationFilter>();
 builder.Services.AddValidatorsFromAssemblyContaining<Program>(
     includeInternalTypes: true,
@@ -83,5 +80,7 @@ finally
 // Make Program accessible for integration tests
 namespace Inventive.AdminAPI
 {
+#pragma warning disable S2094
     public class Program;
+#pragma warning restore S2094
 }
