@@ -2,7 +2,7 @@
 
 namespace Inventive.AdminAPI.Models.V1.Equipment;
 
-internal sealed record AddEquipmentResponseModel
+public sealed record AddEquipmentResponseModel
 {
     public Guid Id { get; init; }
     public string Name { get; init; }

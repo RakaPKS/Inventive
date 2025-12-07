@@ -31,6 +31,30 @@ public class EquipmentRepository(InventiveContext context) : IEquipmentRepositor
             .ToListAsync(cancellationToken);
     }
 
+    public async Task<(List<Equipment> Items, int TotalCount)> GetPaginatedAsync(
+        int skip,
+        int pageSize,
+        EquipmentStatus? status = null,
+        CancellationToken cancellationToken = default)
+    {
+        var query = context.Equipment.AsQueryable();
+
+        if (status.HasValue)
+        {
+            query = query.Where(e => e.Status == status.Value);
+        }
+
+        var totalCount = await query.CountAsync(cancellationToken);
+
+        var items = await query
+            .OrderBy(e => e.Name)
+            .Skip(skip)
+            .Take(pageSize)
+            .ToListAsync(cancellationToken);
+
+        return (items, totalCount);
+    }
+
     public async Task<bool> ExistsByNameAsync(string name, CancellationToken cancellationToken = default)
     {
         return await context.Equipment

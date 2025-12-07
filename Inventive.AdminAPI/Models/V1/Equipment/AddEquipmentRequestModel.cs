@@ -1,6 +1,6 @@
 ﻿namespace Inventive.AdminAPI.Models.V1.Equipment;
 
-internal sealed class AddEquipmentRequestModel
+public sealed class AddEquipmentRequestModel
 {
     public required string Name { get; set; }
 

@@ -60,3 +60,9 @@ finally
 {
     Log.CloseAndFlush();
 }
+
+// Make Program accessible for integration tests
+namespace Inventive.AdminAPI
+{
+    public partial class Program;
+}

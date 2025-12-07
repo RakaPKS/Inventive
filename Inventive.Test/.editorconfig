@@ -1,0 +1,9 @@
+# Test project specific overrides
+root = false
+
+[*.cs]
+# CA1707: Remove underscores from member names
+dotnet_diagnostic.CA1707.severity = none
+
+# CA2234: Pass Uri instead of string
+dotnet_diagnostic.CA2234.severity = none

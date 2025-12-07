@@ -21,6 +21,15 @@ public interface IEquipmentRepository
         CancellationToken cancellationToken = default);
 
     /// <summary>
+    ///     Gets paginated equipment with total count
+    /// </summary>
+    public Task<(List<Equipment> Items, int TotalCount)> GetPaginatedAsync(
+        int skip,
+        int pageSize,
+        EquipmentStatus? status = null,
+        CancellationToken cancellationToken = default);
+
+    /// <summary>
     ///     Checks if equipment with given name exists (case-insensitive)
     ///     Useful for searches
     /// </summary>

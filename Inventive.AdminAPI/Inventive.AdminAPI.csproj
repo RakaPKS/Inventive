@@ -31,4 +31,8 @@
     <ProjectReference Include="..\Inventive.Services\Inventive.Services.csproj"/>
   </ItemGroup>
 
+  <ItemGroup>
+    <InternalsVisibleTo Include="Inventive.Test"/>
+  </ItemGroup>
+
 </Project>
