@@ -1,3 +1,6 @@
+using FluentValidation;
+using Inventive.AdminAPI.Filters;
+using Inventive.AdminAPI.Util;
 using Inventive.Data;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
@@ -13,9 +16,15 @@ Log.Logger = new LoggerConfiguration()
 builder.Host.UseSerilog();
 
 // Add services
-builder.Services.AddControllers();
+builder.Services.AddControllers(options => options.Filters.Add<ValidationFilter>());
+builder.Services.AddScoped<ValidationFilter>();
+builder.Services.AddValidatorsFromAssemblyContaining<Program>(
+    includeInternalTypes: true,
+    lifetime: ServiceLifetime.Scoped);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+DependencyInjectionHelper.ConfigureServices(builder.Services);
+
 
 // Configure PostgreSQL
 builder.Services.AddDbContext<InventiveContext>(options =>
@@ -25,8 +34,18 @@ builder.Services.AddDbContext<InventiveContext>(options =>
 var redisConnectionString = builder.Configuration["Redis:ConnectionString"];
 if (!string.IsNullOrEmpty(redisConnectionString))
 {
-    builder.Services.AddSingleton<IConnectionMultiplexer>(
-        ConnectionMultiplexer.Connect(redisConnectionString));
+    try
+    {
+        var options = ConfigurationOptions.Parse(redisConnectionString);
+        options.AbortOnConnectFail = false;
+        builder.Services.AddSingleton<IConnectionMultiplexer>(
+            await ConnectionMultiplexer.ConnectAsync(options));
+        Log.Information("Redis connection configured");
+    }
+    catch (Exception ex)
+    {
+        Log.Warning(ex, "Failed to configure Redis connection. Continuing without Redis.");
+    }
 }
 
 var app = builder.Build();
@@ -47,7 +66,7 @@ app.MapControllers();
 try
 {
     Log.Information("Starting Inventive Admin API");
-    app.Run();
+    await app.RunAsync();
 }
 catch (Exception ex)
 {
@@ -55,5 +74,13 @@ catch (Exception ex)
 }
 finally
 {
-    Log.CloseAndFlush();
+    await Log.CloseAndFlushAsync();
+}
+
+// Make Program accessible for integration tests
+namespace Inventive.AdminAPI
+{
+#pragma warning disable S2094
+    public class Program;
+#pragma warning restore S2094
 }

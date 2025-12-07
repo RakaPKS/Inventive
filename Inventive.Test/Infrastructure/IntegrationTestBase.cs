@@ -1,0 +1,67 @@
+using Inventive.Data;
+using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.AspNetCore.TestHost;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using StackExchange.Redis;
+using Testcontainers.PostgreSql;
+
+namespace Inventive.Test.Infrastructure;
+
+public abstract class IntegrationTestBase<TProgram> : IAsyncLifetime where TProgram : class
+{
+    private readonly PostgreSqlContainer _postgresContainer = new PostgreSqlBuilder()
+        .WithDatabase("inventive_test")
+        .WithUsername("test")
+        .WithPassword("test")
+        .Build();
+
+    private WebApplicationFactory<TProgram> Factory { get; set; } = null!;
+    protected HttpClient Client { get; private set; } = null!;
+
+    public async Task InitializeAsync()
+    {
+        await _postgresContainer.StartAsync();
+
+#pragma warning disable CA2000 // Dispose objects before losing scope - Factory is disposed in DisposeAsync()
+        Factory = new WebApplicationFactory<TProgram>()
+#pragma warning restore CA2000
+            .WithWebHostBuilder(builder =>
+            {
+                // Override Redis configuration to disable it for tests
+                builder.ConfigureAppConfiguration((context, config) =>
+                {
+                    config.AddInMemoryCollection(new Dictionary<string, string?>
+                    {
+                        ["Redis:ConnectionString"] = ""
+                    }!);
+                });
+
+                builder.ConfigureTestServices(services =>
+                {
+                    services.RemoveAll<IConnectionMultiplexer>();
+                    services.RemoveAll<DbContextOptions<InventiveContext>>();
+                    services.RemoveAll<InventiveContext>();
+                    services.AddDbContext<InventiveContext>(options =>
+                        options.UseNpgsql(_postgresContainer.GetConnectionString()));
+                    services.AddMvc()
+                        .AddApplicationPart(typeof(TProgram).Assembly);
+                    var serviceProvider = services.BuildServiceProvider();
+                    using var scope = serviceProvider.CreateScope();
+                    var context = scope.ServiceProvider.GetRequiredService<InventiveContext>();
+                    context.Database.Migrate();
+                });
+            });
+
+        Client = Factory.CreateClient();
+    }
+
+    public async Task DisposeAsync()
+    {
+        await _postgresContainer.DisposeAsync();
+        await Factory.DisposeAsync();
+        Client.Dispose();
+    }
+}

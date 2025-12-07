@@ -26,7 +26,7 @@ var redisConnectionString = builder.Configuration["Redis:ConnectionString"];
 if (!string.IsNullOrEmpty(redisConnectionString))
 {
     builder.Services.AddSingleton<IConnectionMultiplexer>(
-        ConnectionMultiplexer.Connect(redisConnectionString));
+        await ConnectionMultiplexer.ConnectAsync(redisConnectionString));
 }
 
 var app = builder.Build();
@@ -47,7 +47,7 @@ app.MapControllers();
 try
 {
     Log.Information("Starting Inventive Customer API");
-    app.Run();
+    await app.RunAsync();
 }
 catch (Exception ex)
 {
@@ -55,5 +55,5 @@ catch (Exception ex)
 }
 finally
 {
-    Log.CloseAndFlush();
+    await Log.CloseAndFlushAsync();
 }

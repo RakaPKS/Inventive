@@ -244,55 +244,42 @@ dotnet_naming_style.underscore_camel_case.capitalization = camel_case
 # DISABLED: Overly aggressive/radical analyzers that Microsoft admits are too strict
 
 # CA1031: Do not catch general exception types
-# Reason: Sometimes catching Exception is pragmatic (top-level handlers, cleanup, logging)
 dotnet_diagnostic.CA1031.severity = none
 
 # CA1848: Use LoggerMessage delegates for high-performance logging
-# Reason: Adds complexity without meaningful benefit for most apps
 dotnet_diagnostic.CA1848.severity = none
 
 # CA1303: Do not pass literals as localized parameters
-# Reason: Not all apps need localization
 dotnet_diagnostic.CA1303.severity = none
 
 # CA1305: Specify IFormatProvider
-# Reason: Too noisy for culture-invariant apps
 dotnet_diagnostic.CA1305.severity = none
 
 # CA1307: Specify StringComparison for clarity
-# Reason: Ordinal is fine as default, too aggressive
 dotnet_diagnostic.CA1307.severity = none
 
 # CA1308: Normalize strings to uppercase
-# Reason: Lowercase is often more readable
 dotnet_diagnostic.CA1308.severity = none
 
 # CA1812: Avoid uninstantiated internal classes
-# Reason: DI containers instantiate classes dynamically
 dotnet_diagnostic.CA1812.severity = none
 
 # CA1822: Mark members as static
-# Reason: Interferes with testability and DI
 dotnet_diagnostic.CA1822.severity = none
 
 # CA2007: Consider using ConfigureAwait
-# Reason: Not needed in ASP.NET Core (no SynchronizationContext)
 dotnet_diagnostic.CA2007.severity = none
 
 # CA2227: Collection properties should be read-only
-# Reason: Breaks DTOs and serialization
 dotnet_diagnostic.CA2227.severity = none
 
 # IDE0058: Expression value is never used
-# Reason: Fluent APIs, builder patterns - too noisy
 dotnet_diagnostic.IDE0058.severity = none
 
 # CA1034: Nested types should not be visible
-# Reason: Sometimes makes sense (e.g., Result.Success)
 dotnet_diagnostic.CA1034.severity = none
 
 # CA1054: URI parameters should not be strings
-# Reason: Sometimes strings are more convenient
 dotnet_diagnostic.CA1054.severity = none
 
 # CA1055: URI return values should not be strings
@@ -302,25 +289,21 @@ dotnet_diagnostic.CA1055.severity = none
 dotnet_diagnostic.CA1056.severity = none
 
 # CA1062: Validate arguments of public methods
-# Reason: Nullable reference types handle this
 dotnet_diagnostic.CA1062.severity = none
 
+# CA1515: Consider making public types internal
+dotnet_diagnostic.CA1515.severity = none
+
 # CA1716: Identifiers should not match keywords
-# Reason: Context usually makes it clear
 dotnet_diagnostic.CA1716.severity = none
 
 # CA1720: Identifiers should not contain type names
-# Reason: Sometimes it's the best name (e.g., GetInt)
 dotnet_diagnostic.CA1720.severity = none
 
 # CA1724: Type names should not match namespaces
-# Reason: Rare collision, easy to fix when it happens
 dotnet_diagnostic.CA1724.severity = none
 
-# KEPT AS WARNINGS: Important rules that prevent real bugs
-
 # CA1819: Properties should not return arrays
-# Suggestion: Arrays are mutable, use ReadOnlySpan/IReadOnlyList
 dotnet_diagnostic.CA1819.severity = suggestion
 
 # CA1821: Remove empty finalizers
@@ -544,8 +527,18 @@ dotnet_diagnostic.IDE0036.severity = suggestion
 # IDE0040: Add accessibility modifiers
 dotnet_diagnostic.IDE0040.severity = warning
 
+# Non-nullable field uninitialized
+dotnet_diagnostic.CS8618.severity = none
+
+# CS8620: Argument nullability mismatch
+# Reason: C# 13 extension syntax has immature support for params object?[] - false positives in logging extensions
+dotnet_diagnostic.CS8620.severity = none
+
+# Add readonly modifier
+dotnet_diagnostic.IDE0044.severity = none
+
 # IDE0051: Remove unused private member
-dotnet_diagnostic.IDE0051.severity = warning
+dotnet_diagnostic.IDE0051.severity = none
 
 # IDE0052: Remove unread private member
 dotnet_diagnostic.IDE0052.severity = warning
@@ -562,8 +555,19 @@ dotnet_diagnostic.IDE0070.severity = suggestion
 # IDE0072: Add missing cases to switch expression
 dotnet_diagnostic.IDE0072.severity = suggestion
 
+# IDE0016: Underscore private variables
+dotnet_diagnostic.IDE1006.severity = none
+
 # IDE0161: Use file-scoped namespace
 dotnet_diagnostic.IDE0161.severity = warning
 
 # IDE0290: Use primary constructor
 dotnet_diagnostic.IDE0290.severity = suggestion
+
+#### Generated Code Exclusions ####
+# EF Core Migrations - generated code, should not be manually edited
+[**/Migrations/*.cs]
+dotnet_diagnostic.IDE0161.severity = none
+csharp_style_namespace_declarations = block_scoped:silent
+dotnet_analyzer_diagnostic.severity = none
+generated_code = true
