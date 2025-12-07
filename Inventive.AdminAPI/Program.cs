@@ -28,8 +28,18 @@ builder.Services.AddDbContext<InventiveContext>(options =>
 var redisConnectionString = builder.Configuration["Redis:ConnectionString"];
 if (!string.IsNullOrEmpty(redisConnectionString))
 {
-    builder.Services.AddSingleton<IConnectionMultiplexer>(
-        ConnectionMultiplexer.Connect(redisConnectionString));
+    try
+    {
+        var options = ConfigurationOptions.Parse(redisConnectionString);
+        options.AbortOnConnectFail = false;
+        builder.Services.AddSingleton<IConnectionMultiplexer>(
+            ConnectionMultiplexer.Connect(options));
+        Log.Information("Redis connection configured");
+    }
+    catch (Exception ex)
+    {
+        Log.Warning(ex, "Failed to configure Redis connection. Continuing without Redis.");
+    }
 }
 
 var app = builder.Build();

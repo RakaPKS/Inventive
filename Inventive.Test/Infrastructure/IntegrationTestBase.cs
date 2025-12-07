@@ -33,30 +33,21 @@ public abstract class IntegrationTestBase<TProgram> : IAsyncLifetime where TProg
                 {
                     config.AddInMemoryCollection(new Dictionary<string, string?>
                     {
-                        ["Redis:ConnectionString"] = null
-                    });
+                        ["Redis:ConnectionString"] = ""
+                    }!);
                 });
 
                 builder.ConfigureTestServices(services =>
                 {
-                    // Remove Redis if it was registered
                     services.RemoveAll<IConnectionMultiplexer>();
-
-                    // Remove the existing DbContext registration
                     services.RemoveAll<DbContextOptions<InventiveContext>>();
                     services.RemoveAll<InventiveContext>();
-
-                    // Add test database context
                     services.AddDbContext<InventiveContext>(options =>
                     {
                         options.UseNpgsql(_postgresContainer.GetConnectionString());
                     });
-
-                    // Ensure application parts include the API assembly for internal controller discovery
                     services.AddMvc()
                         .AddApplicationPart(typeof(TProgram).Assembly);
-
-                    // Build service provider and apply migrations
                     var serviceProvider = services.BuildServiceProvider();
                     using var scope = serviceProvider.CreateScope();
                     var context = scope.ServiceProvider.GetRequiredService<InventiveContext>();
