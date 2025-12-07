@@ -66,7 +66,4 @@ public class EquipmentRepository(InventiveContext context) : IEquipmentRepositor
 
     public async Task AddAsync(Equipment equipment, CancellationToken cancellationToken = default) =>
         await context.Equipment.AddAsync(equipment, cancellationToken);
-
-    public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default) =>
-        await context.SaveChangesAsync(cancellationToken);
 }

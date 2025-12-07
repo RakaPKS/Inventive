@@ -1,7 +1,7 @@
 using FluentResults;
 using Inventive.Core.DTO.Common;
 using Inventive.Core.DTO.Equipment;
-using Inventive.Core.Interfaces.Repositories;
+using Inventive.Core.Interfaces;
 using Inventive.Core.Interfaces.Services.Equipment;
 using Inventive.Core.Models.Errors;
 using Inventive.Core.Util;
@@ -10,7 +10,7 @@ using EquipmentEntity = Inventive.Core.Models.Equipment;
 
 namespace Inventive.Services.Equipment;
 
-public class AdminEquipmentService(IEquipmentRepository equipmentRepository, ILogger<AdminEquipmentService> logger)
+public class AdminEquipmentService(IUnitOfWork unitOfWork, ILogger<AdminEquipmentService> logger)
     : IAdminEquipmentService
 {
     public async Task<Result<EquipmentResponseDto>> AddNewEquipment(AddEquipmentRequestDto request)
@@ -27,8 +27,8 @@ public class AdminEquipmentService(IEquipmentRepository equipmentRepository, ILo
             request.Weight
         );
 
-        await equipmentRepository.AddAsync(equipment);
-        await equipmentRepository.SaveChangesAsync();
+        await unitOfWork.Equipment.AddAsync(equipment);
+        await unitOfWork.CommitAsync();
 
         var response = MapToDto(equipment);
 
@@ -45,7 +45,7 @@ public class AdminEquipmentService(IEquipmentRepository equipmentRepository, ILo
             "Fetching equipment page {Page}, size {PageSize}",
             request.Page, request.PageSize);
 
-        var (items, totalCount) = await equipmentRepository.GetPaginatedAsync(
+        var (items, totalCount) = await unitOfWork.Equipment.GetPaginatedAsync(
             request.Skip,
             request.PageSize);
 
@@ -66,7 +66,7 @@ public class AdminEquipmentService(IEquipmentRepository equipmentRepository, ILo
             "Fetching equipment {EquipmentId}",
             id);
 
-        var equipment = await equipmentRepository.GetByIdAsync(id);
+        var equipment = await unitOfWork.Equipment.GetByIdAsync(id);
 
         if (equipment == null)
         {

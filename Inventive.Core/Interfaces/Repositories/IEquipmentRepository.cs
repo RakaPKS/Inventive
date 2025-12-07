@@ -43,12 +43,8 @@ public interface IEquipmentRepository
 
 
     /// <summary>
-    ///     Adds new equipment to the database
+    ///     Adds new equipment to the database context.
+    ///     Changes are not persisted until IUnitOfWork.CommitAsync() is called.
     /// </summary>
     public Task AddAsync(Equipment equipment, CancellationToken cancellationToken = default);
-
-    /// <summary>
-    ///     Saves all pending changes to the database
-    /// </summary>
-    public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }
