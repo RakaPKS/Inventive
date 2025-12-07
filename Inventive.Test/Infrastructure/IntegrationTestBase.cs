@@ -2,8 +2,10 @@ using Inventive.Data;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using StackExchange.Redis;
 using Testcontainers.PostgreSql;
 
 namespace Inventive.Test.Infrastructure;
@@ -26,11 +28,20 @@ public abstract class IntegrationTestBase<TProgram> : IAsyncLifetime where TProg
         Factory = new WebApplicationFactory<TProgram>()
             .WithWebHostBuilder(builder =>
             {
-                // Disable Redis for tests
-                builder.UseSetting("Redis:ConnectionString", string.Empty);
+                // Override Redis configuration to disable it for tests
+                builder.ConfigureAppConfiguration((context, config) =>
+                {
+                    config.AddInMemoryCollection(new Dictionary<string, string?>
+                    {
+                        ["Redis:ConnectionString"] = null
+                    });
+                });
 
                 builder.ConfigureTestServices(services =>
                 {
+                    // Remove Redis if it was registered
+                    services.RemoveAll<IConnectionMultiplexer>();
+
                     // Remove the existing DbContext registration
                     services.RemoveAll<DbContextOptions<InventiveContext>>();
                     services.RemoveAll<InventiveContext>();
