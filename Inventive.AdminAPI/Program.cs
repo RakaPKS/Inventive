@@ -74,5 +74,5 @@ finally
 // Make Program accessible for integration tests
 namespace Inventive.AdminAPI
 {
-    public class Program;
+    public partial class Program;
 }

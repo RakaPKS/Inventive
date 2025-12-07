@@ -107,10 +107,7 @@ public class Equipment : AuditableEntity
     /// <summary>
     /// Changes equipment status
     /// </summary>
-    public void ChangeStatus(EquipmentStatus newStatus)
-    {
-        Status = newStatus;
-    }
+    public void ChangeStatus(EquipmentStatus newStatus) => Status = newStatus;
 
     /// <summary>
     /// Soft-deletes this equipment

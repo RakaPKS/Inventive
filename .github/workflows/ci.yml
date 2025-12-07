@@ -104,7 +104,8 @@ jobs:
             /o:"rakapks" \
             /d:sonar.token="${{ secrets.SONAR_TOKEN }}" \
             /d:sonar.host.url="https://sonarcloud.io" \
-            /d:sonar.cs.opencover.reportsPaths="**/coverage.opencover.xml"
+            /d:sonar.cs.opencover.reportsPaths="**/coverage.opencover.xml" \
+            /d:sonar.exclusions="**/Migrations/**,**/Inventive.UI/**,**/node_modules/**"
 
           dotnet build --configuration Release
 

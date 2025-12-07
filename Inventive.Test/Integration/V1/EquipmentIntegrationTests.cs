@@ -39,7 +39,7 @@ public class EquipmentIntegrationTests : IntegrationTestBase<AdminAPI.Program>
         equipment.Width.Should().Be(50);
         equipment.Height.Should().Be(75);
         equipment.Weight.Should().Be(25);
-        equipment.CreatedAt.Should().NotBe(default(DateTimeOffset));
+        equipment.CreatedAt.Should().NotBe(default);
     }
 
     [Fact]

@@ -46,6 +46,8 @@ public abstract class AuditableEntity
 
     // Navigation properties - will be configured with FK constraints in Feature 02 (Admin User Management)
     // Commented out until AdminUser entity exists
+#pragma warning disable S125 // Remove commented out code - intentionally kept for future feature
     // public AdminUser? CreatedByUser { get; set; }
     // public AdminUser? ModifiedByUser { get; set; }
+#pragma warning restore S125
 }

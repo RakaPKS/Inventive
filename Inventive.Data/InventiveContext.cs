@@ -30,16 +30,20 @@ public class InventiveContext(DbContextOptions<InventiveContext> options) : DbCo
                     entry.Entity.CreatedAt = DateTimeOffset.UtcNow;
                     entry.Entity.CreatedById = SystemUserId; // Phase 1: System user
                     entry.Entity.CreatedBy = "System"; // Phase 1: Placeholder
+#pragma warning disable S125 // Remove commented out code - Phase 2 implementation placeholder
                     // Phase 2: entry.Entity.CreatedById = _currentUser?.UserId ?? SystemUserId;
                     // Phase 2: entry.Entity.CreatedBy = _currentUser?.Email ?? "System";
+#pragma warning restore S125
                     break;
 
                 case EntityState.Modified:
                     entry.Entity.ModifiedAt = DateTimeOffset.UtcNow;
                     entry.Entity.ModifiedById = SystemUserId; // Phase 1: System user
                     entry.Entity.ModifiedBy = "System"; // Phase 1: Placeholder
+#pragma warning disable S125 // Remove commented out code - Phase 2 implementation placeholder
                     // Phase 2: entry.Entity.ModifiedById = _currentUser?.UserId ?? SystemUserId;
                     // Phase 2: entry.Entity.ModifiedBy = _currentUser?.Email ?? "System";
+#pragma warning restore S125
                     break;
             }
         }
@@ -96,6 +100,7 @@ public class InventiveContext(DbContextOptions<InventiveContext> options) : DbCo
                 .HasMaxLength(200);
 
             // FK relationships will be added in Feature 02 when User entity is created:
+#pragma warning disable S125 // Remove commented out code - Feature 02 implementation placeholder
             // entity.HasOne(e => e.CreatedByUser)
             //     .WithMany()
             //     .HasForeignKey(e => e.CreatedById)
@@ -105,6 +110,7 @@ public class InventiveContext(DbContextOptions<InventiveContext> options) : DbCo
             //     .WithMany()
             //     .HasForeignKey(e => e.ModifiedById)
             //     .OnDelete(DeleteBehavior.NoAction);
+#pragma warning restore S125
 
             // Soft delete
             entity.Property(e => e.IsDeleted)

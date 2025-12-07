@@ -1,3 +1,7 @@
+#pragma warning disable S2629 // Don't use string interpolation in logging message templates
+#pragma warning disable CA2254 // Template should be a static expression
+#pragma warning disable CA1848 // Use LoggerMessage delegates for performance
+
 using Microsoft.Extensions.Logging;
 
 namespace Inventive.Core.Util;

@@ -25,7 +25,9 @@ public abstract class IntegrationTestBase<TProgram> : IAsyncLifetime where TProg
     {
         await _postgresContainer.StartAsync();
 
+#pragma warning disable CA2000 // Dispose objects before losing scope - Factory is disposed in DisposeAsync()
         Factory = new WebApplicationFactory<TProgram>()
+#pragma warning restore CA2000
             .WithWebHostBuilder(builder =>
             {
                 // Override Redis configuration to disable it for tests
@@ -43,9 +45,7 @@ public abstract class IntegrationTestBase<TProgram> : IAsyncLifetime where TProg
                     services.RemoveAll<DbContextOptions<InventiveContext>>();
                     services.RemoveAll<InventiveContext>();
                     services.AddDbContext<InventiveContext>(options =>
-                    {
-                        options.UseNpgsql(_postgresContainer.GetConnectionString());
-                    });
+                        options.UseNpgsql(_postgresContainer.GetConnectionString()));
                     services.AddMvc()
                         .AddApplicationPart(typeof(TProgram).Assembly);
                     var serviceProvider = services.BuildServiceProvider();
@@ -63,12 +63,5 @@ public abstract class IntegrationTestBase<TProgram> : IAsyncLifetime where TProg
         await _postgresContainer.DisposeAsync();
         await Factory.DisposeAsync();
         Client.Dispose();
-    }
-
-    protected async Task<InventiveContext> GetDbContextAsync()
-    {
-        var scope = Factory.Services.CreateScope();
-        var context = scope.ServiceProvider.GetRequiredService<InventiveContext>();
-        return await Task.FromResult(context);
     }
 }

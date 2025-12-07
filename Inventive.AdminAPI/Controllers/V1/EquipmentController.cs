@@ -110,7 +110,7 @@ public sealed class EquipmentController(IAdminEquipmentService equipmentService,
 
         if (!result.IsSuccess)
         {
-            var error = result.Errors.FirstOrDefault();
+            var error = result.Errors is [var first, ..] ? first : null;
             if (error is NotFoundError)
             {
                 logger.LogWarningWithContext(
