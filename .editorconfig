@@ -576,3 +576,11 @@ dotnet_diagnostic.IDE0161.severity = warning
 
 # IDE0290: Use primary constructor
 dotnet_diagnostic.IDE0290.severity = suggestion
+
+#### Generated Code Exclusions ####
+# EF Core Migrations - generated code, should not be manually edited
+[**/Migrations/*.cs]
+dotnet_diagnostic.IDE0161.severity = none
+csharp_style_namespace_declarations = block_scoped:silent
+dotnet_analyzer_diagnostic.severity = none
+generated_code = true
