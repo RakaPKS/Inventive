@@ -11,7 +11,7 @@ namespace Inventive.Core.Util;
 /// </summary>
 public static class LoggerExtensions
 {
-#pragma warning disable S1144
+#pragma warning disable S3398
     private static object?[] PrependClassName(string className, object?[] args)
     {
         var allArgs = new object?[args.Length + 1];
@@ -19,7 +19,7 @@ public static class LoggerExtensions
         Array.Copy(args, 0, allArgs, 1, args.Length);
         return allArgs;
     }
-#pragma warning restore S1144
+#pragma warning restore S3398
 
     extension<T>(ILogger<T> logger)
     {
